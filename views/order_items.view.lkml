@@ -94,7 +94,7 @@ view: order_items {
 
   dimension: is_valid_oder {
     type:  yesno
-    sql:  ${status} not in ("cancelled","returned");;
+    sql:  ${sale_price} not in ("cancelled","returned");;
   }
 
   measure: count {
