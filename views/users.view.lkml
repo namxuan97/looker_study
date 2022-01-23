@@ -31,8 +31,10 @@ view: users {
       raw,
       time,
       date,
+      day_of_month,
       week,
       month,
+      month_name,
       quarter,
       year
     ]
@@ -84,8 +86,36 @@ view: users {
     sql: ${TABLE}."ZIP" ;;
   }
 
+  dimension: age_group {
+    type: tier
+    tiers: [15,26,36,51,66]
+    sql: ${age} ;;
+    style:  integer
+  }
+
+
+
+  dimension: day_enrolled {
+    type: duration_day
+    sql_start: ${created_raw} ;;
+    sql_end: current_timestamp() ;;
+  }
+
+  dimension: is_new_customer {
+    case: {
+      when: {
+        sql: ${day_enrolled} <= 90 ;;
+        label: "New customers"
+        }
+    else: "Other customers"
+    }
+  }
+
   measure: count {
     type: count
     drill_fields: [id, last_name, first_name, events.count, order_items.count]
   }
+
+
+
 }
