@@ -15,8 +15,9 @@ explore: distribution_centers {}
 explore: etl_jobs {}
 
 explore: users {
-  always_filter: {
-    filters: [users.created_date: "before today"]
+  conditionally_filter: {
+    filters: [users.created_date: "last 90 days"]
+    unless: [users.id,users.state]
   }
 }
 
@@ -69,12 +70,11 @@ explore: order_items {
   }
 
   always_filter: {
-    filters: [order_items.is_returned: "no", order_items.sale_price: "> 200",
-              order_items.status: "Complete", order_items.count: "> 5" ]
+    filters: [order_items.created_date: "last 30 days" ]
   }
 
   conditionally_filter: {
-    filters: [inventory_items.created_year: "last 2 years"]
+    filters: [order_items.created_year: "last 2 years"]
     unless: [users.id]
   }
 
