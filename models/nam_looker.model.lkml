@@ -14,6 +14,13 @@ explore: distribution_centers {}
 
 explore: etl_jobs {}
 
+explore: users {
+  always_filter: {
+    filters: [users.created_date: "before today"]
+  }
+}
+
+
 explore: events {
   join: users {
     type: left_outer
@@ -60,6 +67,25 @@ explore: order_items {
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
+
+  always_filter: {
+    filters: [order_items.is_returned: "no", order_items.sale_price: "> 200",
+              order_items.status: "Complete", order_items.count: "> 5" ]
+  }
+
+  conditionally_filter: {
+    filters: [inventory_items.created_year: "last 2 years"]
+    unless: [users.id]
+  }
+
+}
+
+explore: order_item_userid {
+  join:  users {
+    type: left_outer
+    sql_on:  ${order_item_userid.user_id} = ${users.id} ;;
+    relationship: one_to_one
+  }
 }
 
 explore: products {
@@ -69,5 +95,3 @@ explore: products {
     relationship: many_to_one
   }
 }
-
-explore: users {}
