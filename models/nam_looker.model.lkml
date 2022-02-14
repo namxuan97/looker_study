@@ -14,12 +14,12 @@ explore: distribution_centers {}
 
 explore: etl_jobs {}
 
-explore: users {
-  conditionally_filter: {
-    filters: [users.created_date: "last 90 days"]
-    unless: [users.id,users.state]
-  }
-}
+# explore: users {
+#   conditionally_filter: {
+#     filters: [users.created_date: "last 90 days"]
+#     unless: [users.id,users.state]
+#   }
+# }
 
 
 explore: events {
@@ -69,9 +69,9 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  always_filter: {
-    filters: [order_items.created_date: "last 30 days" ]
-  }
+  # always_filter: {
+  #   filters: [order_items.created_date: "last 30 days" ]
+  # }
 
   conditionally_filter: {
     filters: [order_items.created_year: "last 2 years"]
@@ -82,6 +82,14 @@ explore: order_items {
 
 explore: order_item_userid {
   join:  users {
+    type: left_outer
+    sql_on:  ${order_item_userid.user_id} = ${users.id} ;;
+    relationship: one_to_one
+  }
+}
+
+explore: users {
+  join:  order_item_userid {
     type: left_outer
     sql_on:  ${order_item_userid.user_id} = ${users.id} ;;
     relationship: one_to_one

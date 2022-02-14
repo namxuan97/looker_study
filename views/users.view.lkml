@@ -61,6 +61,11 @@ view: users {
     sql: ${TABLE}."LAST_NAME" ;;
   }
 
+  dimension: user_name {
+    type: string
+    sql: concat(${first_name},${last_name}) ;;
+  }
+
   dimension: latitude {
     type: number
     sql: ${TABLE}."LATITUDE" ;;
@@ -110,6 +115,7 @@ view: users {
     else: "Other customers"
     }
   }
+
 
   measure: count {
     type: count

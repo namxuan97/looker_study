@@ -237,6 +237,16 @@ view: order_items {
     value_format_name: decimal_0
   }
 
+  measure: first_order_date {
+    type: date
+    sql: min(${created_date});;
+  }
+
+  measure: last_order_date {
+    type: date
+    sql: max(${created_date});;
+  }
+
 #for top 10
   parameter: max_rank {
     type: number
