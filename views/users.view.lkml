@@ -98,13 +98,25 @@ view: users {
     style:  integer
   }
 
-
+  dimension: month_enrolled_tier {
+    type:  tier
+    tiers: [5,10,20,30,40,60]
+    sql: ${month_enrolled} ;;
+    style: integer
+  }
 
   dimension: day_enrolled {
     type: duration_day
     sql_start: ${created_raw} ;;
     sql_end: current_timestamp() ;;
   }
+
+  dimension: month_enrolled {
+    type: duration_month
+    sql_start: ${created_raw} ;;
+    sql_end: current_timestamp() ;;
+  }
+
 
   dimension: is_new_customer {
     case: {
@@ -120,6 +132,16 @@ view: users {
   measure: count {
     type: count
     drill_fields: [id, last_name, first_name, events.count, order_items.count]
+  }
+
+  measure: average_signup_day {
+    type: average
+    sql: ${day_enrolled} ;;
+  }
+
+  measure: average_signup_month {
+    type: average
+    sql: ${month_enrolled} ;;
   }
 
 

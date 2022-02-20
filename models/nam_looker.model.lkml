@@ -51,6 +51,12 @@ explore: order_items {
     relationship: many_to_one
   }
 
+  join: order_item_userid {
+    type: left_outer
+    sql_on: ${order_items.user_id} = ${order_item_userid.user_id} ;;
+    relationship: many_to_one
+  }
+
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
@@ -67,7 +73,15 @@ explore: order_items {
     type: left_outer
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
+    }
+
+  join: order_frequency{
+    type: left_outer
+    sql_on: ${order_items.id} = ${order_frequency.id} ;;
+    relationship: one_to_one
   }
+
+
 
   # always_filter: {
   #   filters: [order_items.created_date: "last 30 days" ]
@@ -103,3 +117,7 @@ explore: products {
     relationship: many_to_one
   }
 }
+
+explore: customer_cohort{}
+
+explore: order_frequency {}

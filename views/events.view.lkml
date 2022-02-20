@@ -104,4 +104,10 @@ view: events {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
+
+  measure: number_of_users{
+    type: count_distinct
+    sql: ${user_id} ;;
+
+  }
 }
